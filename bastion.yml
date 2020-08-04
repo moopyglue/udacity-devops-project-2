@@ -35,8 +35,10 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
-          yum update -y
-      ImageId: ami-067f5c3d5a99edc80
+          apt update -y
+          export DEBIAN_FRONTEND=noninteractive
+          apt upgrade -y
+      ImageId: ami-003634241a8fcdec0
       KeyName: udp2-ssh-bastion
       InstanceType: t3.micro
       SecurityGroupIds : [ !GetAtt SGBastion.GroupId ]
