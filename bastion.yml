@@ -1,0 +1,48 @@
+Description: >
+  Simon Wall / MoopyGlue
+
+Parameters:
+  paramEnvName:
+      Description: Single Parameter that we are passing with the env name.
+      Type: String
+
+Resources:
+
+  #===============================================================
+  # Security Groups
+  #===============================================================
+
+  SGBastion:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+        VpcId:
+          Fn::ImportValue: !Sub "${paramEnvName}-VPCID"
+        GroupDescription: Security Group Bastion Host
+        SecurityGroupIngress:
+        - IpProtocol: tcp  # ssh access to bastion host from single IP
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 77.100.183.63/32
+        SecurityGroupEgress:
+        - IpProtocol: tcp # ssh access to stack servers
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0            
+
+  Bastion:
+    Type: AWS::EC2::Instance
+    Properties: 
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+      ImageId: ami-067f5c3d5a99edc80
+      KeyName: udp2-ssh-bastion
+      InstanceType: t3.micro
+      SecurityGroupIds : [ !GetAtt SGBastion.GroupId ]
+      SubnetId: 
+        Fn::ImportValue: !Sub "${paramEnvName}-PUB1-SN"
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdk"
+        Ebs:
+          VolumeSize: '10'

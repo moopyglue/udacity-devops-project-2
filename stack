@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cmd="
+    aws cloudformation $1-stack \
+    --stack-name $2 \
+    $( [[ -z "$3" ]] || echo "--template-body file://$3" ) \
+    $( [[ -z "$4" ]] || echo "--parameters file://$4" ) \
+    --region=us-west-2
+"
+echo $cmd
+$cmd

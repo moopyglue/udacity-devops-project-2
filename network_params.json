@@ -1,0 +1,8 @@
+[
+	{ "ParameterKey": "paramEnvName",        "ParameterValue": "udp2" },
+	{ "ParameterKey": "paramVpcCIDR",        "ParameterValue": "10.0.0.0/16" },
+	{ "ParameterKey": "paramAZ1PubSubCIDR",  "ParameterValue": "10.0.0.0/24" },
+	{ "ParameterKey": "paramAZ2PubSubCIDR",  "ParameterValue": "10.0.1.0/24" },
+	{ "ParameterKey": "paramAZ1PrivSubCIDR", "ParameterValue": "10.0.2.0/24" },
+	{ "ParameterKey": "paramAZ2PrivSubCIDR", "ParameterValue": "10.0.3.0/24" }
+]
