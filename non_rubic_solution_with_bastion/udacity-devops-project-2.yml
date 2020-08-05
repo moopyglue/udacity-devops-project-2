@@ -28,17 +28,17 @@ Parameters:
   paramAZ2PubSubCIDR:
     Description: IP range (CIDR notation) for the Public subnet in the second Availability Zone
     Type: String
-    Default: 10.0.0.1/24
+    Default: 10.0.1.0/24
 
   paramAZ1PrivSubCIDR:
     Description: IP range (CIDR notation) for the Private subnet in the first Availability Zone
     Type: String
-    Default: 10.0.0.2/24
+    Default: 10.0.2.0/24
 
   paramAZ2PrivSubCIDR:
     Description: IP range (CIDR notation) for the Private subnet in the second Availability Zone
     Type: String
-    Default: 10.0.0.3/24
+    Default: 10.0.3.0/24
 
   paramWebAppS3IAM:
     Description: IAM s3 access for Instance Profile
@@ -251,7 +251,7 @@ Resources:
   SGLoadBal:
       Type: AWS::EC2::SecurityGroup
       Properties: 
-          VpcId: vpcMain
+          VpcId: !Ref vpcMain
           GroupDescription: Security Group Load Balancer
           SecurityGroupIngress:
           - IpProtocol: tcp
@@ -267,7 +267,7 @@ Resources:
   SGWebServers:
       Type: AWS::EC2::SecurityGroup
       Properties: 
-          VpcId: vpcMain
+          VpcId: !Ref vpcMain
           GroupDescription: Security Group Web Servers
           SecurityGroupIngress:
           - IpProtocol: tcp
@@ -388,15 +388,28 @@ Resources:
       Port: 80
       Protocol: HTTP
       UnhealthyThresholdCount: 2
-      VpcId: vpcMain
+      VpcId: !Ref vpcMain
 
 #================================================================
 
 Outputs: 
 
+  Vpcid: 
+      Description: A reference to the software external URL for thsi cluster
+      Value: !Ref vpcMain
+      Export:
+          Name: !Sub ${paramEnvName}-VPCID
+
+  BastionSubnet:
+      Description: A reference to the software external URL for thsi cluster
+      Value: !Ref AZ1PubSub
+      Export:
+          Name: !Sub ${paramEnvName}-Bastion-Subnet
+
   ExternalURL: 
-      Description: A reference to the software external URL
-      Value: !Ref Listener 
+      Description: A reference to the software external URL for thsi cluster
+      Value: !Join ['',['http://',!GetAtt WebAppLB.DNSName]]
       Export:
           Name: !Sub ${paramEnvName}-External-URL
+
 
