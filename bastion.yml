@@ -38,6 +38,8 @@ Resources:
           apt update -y
           export DEBIAN_FRONTEND=noninteractive
           apt upgrade -y
+      # Amazon Image ami-003634241a8fcdec0 : Ubuntu Server 18.04 LTS
+      # NOTE: this image uses account 'ubuntu' instead of 'ec2-user'
       ImageId: ami-003634241a8fcdec0
       KeyName: udp2-ssh-bastion
       InstanceType: t3.micro

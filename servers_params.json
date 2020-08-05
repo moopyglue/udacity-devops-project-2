@@ -1,3 +1,4 @@
 [
-	{ "ParameterKey": "paramEnvName",        "ParameterValue": "udp2" }
+	{ "ParameterKey": "paramEnvName",     "ParameterValue": "udp2" },
+	{ "ParameterKey": "paramWebAppS3TGZ", "ParameterValue": "s3://udp2-demoapp/webapp.tgz" }
 ]

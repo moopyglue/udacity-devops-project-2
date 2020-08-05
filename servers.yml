@@ -5,6 +5,9 @@ Parameters:
   paramEnvName:
       Description: Single Parameter that we are passing with the env name.
       Type: String
+  paramWebAppS3TGZ:
+      Description: s3 location for TGZ file containing the web app files
+      Type: String
 
 Resources:
 
@@ -57,17 +60,28 @@ Resources:
   #   - AWS::AutoScaling::AutoScalingGroup
   #===============================================================
 
+  WebAppInstProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles: 
+        - udp2_s3readonly
+
   WebAppLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
-          yum update -y
-          yum install nginx -y
-          /etc/init.d/nginx start 
-      ImageId: ami-067f5c3d5a99edc80
+          apt-get update -y
+          apt-get install unzip awscli -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          aws s3 cp ${paramWebAppS3TGZ} - | tar xvfz -
+          reboot
+      ImageId: ami-003634241a8fcdec0 # Ubuntu 10.04 LTS @ubuntu
       KeyName: udp2-ssh-privatesubnet
+      IamInstanceProfile: !Ref WebAppInstProfile
       SecurityGroups:
       - Ref: SGWebServers
       InstanceType: t3.micro
@@ -84,7 +98,7 @@ Resources:
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
       MinSize: '2'
-      MaxSize: '4'
+      MaxSize: '2'
       TargetGroupARNs:
       - Ref: WebAppTargetGroup
 
