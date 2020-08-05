@@ -45,7 +45,7 @@ Resources:
       InstanceType: t3.micro
       SecurityGroupIds : [ !GetAtt SGBastion.GroupId ]
       SubnetId: 
-        Fn::ImportValue: !Sub "${paramEnvName}-PUB1-SN"
+        Fn::ImportValue: !Sub "${paramEnvName}-Bastion-Subnet"
       BlockDeviceMappings:
       - DeviceName: "/dev/sdk"
         Ebs:
