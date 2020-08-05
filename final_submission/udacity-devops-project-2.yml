@@ -274,10 +274,6 @@ Resources:
             FromPort: 80   # http access to server from externally
             ToPort: 80
             CidrIp: 0.0.0.0/0
-          - IpProtocol: tcp  # ssh access to host from bastion host
-            FromPort: 22
-            ToPort: 22
-            CidrIp: 0.0.0.0/0
           SecurityGroupEgress:
           - IpProtocol: tcp # open all ports for external access
             FromPort: 0
@@ -313,11 +309,10 @@ Resources:
           aws s3 cp ${paramWebAppS3TGZ} - | tar xvfz -
           reboot
       ImageId: ami-003634241a8fcdec0 # Ubuntu 10.04 LTS @ubuntu
-      KeyName: udp2-ssh-privatesubnet
       IamInstanceProfile: !Ref WebAppInstProfile
       SecurityGroups:
       - Ref: SGWebServers
-      InstanceType: t3.micro
+      InstanceType: t3.small
       BlockDeviceMappings:
       - DeviceName: "/dev/sdk"
         Ebs:
@@ -332,7 +327,8 @@ Resources:
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
       MinSize: '2'
-      MaxSize: '2'
+      MaxSize: '4'
+      DesiredCapacity: '2'
       TargetGroupARNs:
       - Ref: WebAppTargetGroup
 

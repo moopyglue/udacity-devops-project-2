@@ -1,0 +1,25 @@
+
+This shows the things removed / altered between the non_rubic solution and the final_solution
+
+	$ diff non_rubic_solution_with_bastion/ final_submission/
+	Only in non_rubic_solution_with_bastion/: bastion.yml
+	Only in non_rubic_solution_with_bastion/: bastion_params.json
+	Only in non_rubic_solution_with_bastion/: jump
+	diff non_rubic_solution_with_bastion/stack-id final_submission/stack-id
+	1c1
+	< joe
+	---
+	> simon
+	diff non_rubic_solution_with_bastion/udacity-devops-project-2.yml final_submission/udacity-devops-project-2.yml
+	277,280d276
+	<           - IpProtocol: tcp  # ssh access to host from bastion host
+	<             FromPort: 22
+	<             ToPort: 22
+	<             CidrIp: 0.0.0.0/0
+	316d311
+	<       KeyName: udp2-ssh-privatesubnet
+	320c315
+	<       InstanceType: t3.micro
+	---
+	>       InstanceType: t3.small
+	
